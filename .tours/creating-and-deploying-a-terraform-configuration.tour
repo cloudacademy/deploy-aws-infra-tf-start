@@ -1,0 +1,116 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Creating and Deploying a Terraform Configuration",
+  "steps": [
+    {
+      "directory": "aws_vpc",
+      "description": "Introduction\n\nthis dir includes the main.tf file, the config file for tf..."
+    },
+    {
+      "file": "aws_vpc/main.tf",
+      "description": "Click **Insert Code** below to configure the AWS provider, then click **Next**:\n\n```js\nterraform {\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"5.9.0\"\n    }\n  }\n}\n\n\n```",
+      "line": 41
+    },
+    {
+      "file": "aws_vpc/main.tf",
+      "selection": {
+        "start": {
+          "line": 4,
+          "character": 7
+        },
+        "end": {
+          "line": 4,
+          "character": 32
+        }
+      },
+      "description": "The Terraform resource block configures various settings for Terraform. Starting with Terraform version 13.0, the required_providers block was introduced for describing the version and source of Terraform providers. Providers allow Terraform to communicate with remote systems. In this case, the AWS provider is used to connect to AWS and create resources. , In the case, since the AWS provider is an official HashiCorp supported provider, the source is hashicorp/aws."
+    },
+    {
+      "file": "aws_vpc/main.tf",
+      "selection": {
+        "start": {
+          "line": 5,
+          "character": 7
+        },
+        "end": {
+          "line": 5,
+          "character": 24
+        }
+      },
+      "description": "The provider version is described in the AWS block. This is extremely important as the AWS provider is updated almost weekly with potential breaking updates. Infrastructure code typically \"rots\" quickly due to the fast-paced development of Cloud Service Providers. The same code used to automate resources in the cloud has a good chance of not working after 6 months if it is not maintained and updated. So be sure to pin the version of the Terraform provider to reduce this risk."
+    },
+    {
+      "file": "aws_vpc/main.tf",
+      "description": "Click **Insert Code** to add the following provider resource block, then click **Next** to continue:\n\n```js\nprovider \"aws\" {\n  region = \"us-west-2\"\n}\n\n\n```",
+      "line": 24
+    },
+    {
+      "file": "aws_vpc/main.tf",
+      "selection": {
+        "start": {
+          "line": 11,
+          "character": 3
+        },
+        "end": {
+          "line": 11,
+          "character": 23
+        }
+      },
+      "description": "The provider resource block is used to specify how to authenticate to AWS and what region to connect to. In this example, the \"us-west-2\" region is used. There are several ways to authenticate the AWS provider.\n\nIn this lab environment, the EC2 hosting this IDE environment has been granted permissions to the AWS environment and is passing the credentials through to the provider. Terraform is authenticated by accessing the IAM Role permissions granted to the EC2 instance profile."
+    },
+    {
+      "file": "aws_vpc/main.tf",
+      "description": "Insert the following Amazon VPC resource configuration, then click **Next**:\n\n```js\nresource \"aws_vpc\" \"aws_vpc\" {\n  cidr_block = \"10.0.0.0/16\"\n\n  tags = {\n    Name = \"ca-lab-vpc\"\n  }\n}\n\n\n```",
+      "line": 28
+    },
+    {
+      "file": "aws_vpc/main.tf",
+      "selection": {
+        "start": {
+          "line": 15,
+          "character": 3
+        },
+        "end": {
+          "line": 15,
+          "character": 29
+        }
+      },
+      "description": "Cidr block description\n\nProvide link to vpc resource attributes"
+    },
+    {
+      "file": "aws_vpc/main.tf",
+      "description": "Insert the following template outputs to complete the **main.tf** file configurations:\n\n```js\noutput \"id\" {\n  description = test\n  value       = aws_vpc.aws_vpc.id\n}\noutput \"route_table_id\" {\n  description = test\n  value       = aws_vpc.aws_vpc.main_route_table_id\n}\noutput \"security_group_id\" {\n  description = test\n  value       = aws_vpc.aws_vpc.default_security_group_id\n}\n```",
+      "line": 44
+    },
+    {
+      "file": "aws_vpc/main.tf",
+      "selection": {
+        "start": {
+          "line": 22,
+          "character": 1
+        },
+        "end": {
+          "line": 25,
+          "character": 2
+        }
+      },
+      "description": "output description and value with references"
+    },
+    {
+      "directory": "aws_vpc",
+      "description": "The **aws_vpc** directory will be where the `terraform` CLI commands will run. \n\nTerraform init description...\n\nRun the following commands:\n\n>> cd aws_vpc && terraform init\n"
+    },
+    {
+      "directory": "aws_vpc",
+      "description": "terraform plan description...\n\n>> terraform plan\n\nterraform plan output description with screenshots\n"
+    },
+    {
+      "directory": "aws_vpc",
+      "description": "terraform apply description\n`--auto-approve` flag description\n\nClick the following command to run the `terraform apply` command and observe the output in the terminal:\n\n>> terraform apply --auto-approve\n\nTerraform apply output and screenshots\n"
+    },
+    {
+      "directory": "aws_vpc",
+      "description": ">> aws ec2 describe-vpcs --filters Name=is-default,Values=false\n\nDescription of attributes\n"
+    }
+  ]
+}
