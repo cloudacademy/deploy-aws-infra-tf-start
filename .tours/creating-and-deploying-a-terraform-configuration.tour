@@ -4,12 +4,14 @@
   "steps": [
     {
       "directory": "aws_vpc",
-      "description": "Introduction\n\nthis dir includes the main.tf file, the config file for tf..."
+      "description": "The **aws_vpc** directory will store your Terraform configuration file. When it is time to initialize, plan and apply your changes, the Terraform commands will run from within this directory.\n\nYou will be inserting code into the **main.tf** file to configure your VPC.",
+      "title": "Directory"
     },
     {
       "file": "aws_vpc/main.tf",
       "description": "Click **Insert Code** below to configure the AWS provider, then click **Next**:\n\n```js\nterraform {\n  required_providers {\n    aws = {\n      source  = \"hashicorp/aws\"\n      version = \"5.9.0\"\n    }\n  }\n}\n\n\n```",
-      "line": 41
+      "line": 59,
+      "title": "Terraform"
     },
     {
       "file": "aws_vpc/main.tf",
@@ -23,7 +25,8 @@
           "character": 32
         }
       },
-      "description": "The Terraform resource block configures various settings for Terraform. Starting with Terraform version 13.0, the required_providers block was introduced for describing the version and source of Terraform providers. Providers allow Terraform to communicate with remote systems. In this case, the AWS provider is used to connect to AWS and create resources. , In the case, since the AWS provider is an official HashiCorp supported provider, the source is hashicorp/aws."
+      "description": "The Terraform resource block configures various settings for Terraform. Starting with Terraform version 13.0, the `required_providers` block was introduced to describe the version and source of Terraform providers. \n\nProviders allow Terraform to communicate with remote systems. In this case, the `aws` provider connects to AWS and creates the resources on your behalf. The `hashicorp/aws` source indicates that you are using an official [HashiCorp supported provider](https://registry.terraform.io/browse/providers?ajs_aid=85ea25d4-857a-441a-8b21-e207bad6bdd6&product_intent=terraform).",
+      "title": "Required providers"
     },
     {
       "file": "aws_vpc/main.tf",
@@ -37,12 +40,14 @@
           "character": 24
         }
       },
-      "description": "The provider version is described in the AWS block. This is extremely important as the AWS provider is updated almost weekly with potential breaking updates. Infrastructure code typically \"rots\" quickly due to the fast-paced development of Cloud Service Providers. The same code used to automate resources in the cloud has a good chance of not working after 6 months if it is not maintained and updated. So be sure to pin the version of the Terraform provider to reduce this risk."
+      "description": "Take note of the `version`, set to `5.9.0`. Setting the provider version is important due to the frequent, potentially breaking, updates deployed for the AWS provider. \n\nBy setting this value, you can pin the specific functionality of that version, and avoid any updates negatively impacting your project. Without this version defined, Terraform will utilize the latest version of the AWS provider.",
+      "title": "Provider version"
     },
     {
       "file": "aws_vpc/main.tf",
       "description": "Click **Insert Code** to add the following provider resource block, then click **Next** to continue:\n\n```js\nprovider \"aws\" {\n  region = \"us-west-2\"\n}\n\n\n```",
-      "line": 24
+      "line": 32,
+      "title": "Region"
     },
     {
       "file": "aws_vpc/main.tf",
@@ -56,12 +61,14 @@
           "character": 23
         }
       },
-      "description": "The provider resource block is used to specify how to authenticate to AWS and what region to connect to. In this example, the \"us-west-2\" region is used. There are several ways to authenticate the AWS provider.\n\nIn this lab environment, the EC2 hosting this IDE environment has been granted permissions to the AWS environment and is passing the credentials through to the provider. Terraform is authenticated by accessing the IAM Role permissions granted to the EC2 instance profile."
+      "description": "The provider resource block is used to specify how to authenticate to AWS and which region to connect to. This lab will authenticate and deploy resources into the `us-west-2` region.\n\nIn this lab environment, the EC2 hosting this IDE environment has been granted permissions to the AWS environment and is passing the credentials through to the provider. Terraform is authenticated by accessing the IAM Role permissions granted to the EC2 instance profile.",
+      "title": "Authentication"
     },
     {
       "file": "aws_vpc/main.tf",
-      "description": "Insert the following Amazon VPC resource configuration, then click **Next**:\n\n```js\nresource \"aws_vpc\" \"aws_vpc\" {\n  cidr_block = \"10.0.0.0/16\"\n\n  tags = {\n    Name = \"ca-lab-vpc\"\n  }\n}\n\n\n```",
-      "line": 28
+      "description": "Insert the following Amazon VPC resource configuration, then click **Next**:\n\n```js\nresource \"aws_vpc\" \"lab_vpc\" {\n  cidr_block = \"10.0.0.0/16\"\n\n  tags = {\n    Name = \"ca-lab-vpc\"\n  }\n}\n\n\n```",
+      "line": 44,
+      "title": "VPC"
     },
     {
       "file": "aws_vpc/main.tf",
@@ -75,12 +82,14 @@
           "character": 29
         }
       },
-      "description": "Cidr block description\n\nProvide link to vpc resource attributes"
+      "description": "The `aws_vpc` resource is configured with a second `lab_vpc` label. This label is used to identify this specific VPC resource. These labels allow resources to be identified within the configuration file and are useful when more than one instance of a resource exists.\n\nThe `cidr_block` identifier is used to explicitly set the IPv4 CIDR block of the VPC. \n\nArgument specifications for each resource block can be found in the Terraform documentation available for each provider. The CIDR block argument is an example of an optional [VPC argument](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc.html#argument-reference) used to configure the resource.\n\nDepending on the resource type, the AWS provider will create and apply changes to the resource using certain default values if a value is not present for the argument. You will see this in action later in this lab.",
+      "title": "Arguments"
     },
     {
       "file": "aws_vpc/main.tf",
-      "description": "Insert the following template outputs to complete the **main.tf** file configurations:\n\n```js\noutput \"id\" {\n  description = test\n  value       = aws_vpc.aws_vpc.id\n}\noutput \"route_table_id\" {\n  description = test\n  value       = aws_vpc.aws_vpc.main_route_table_id\n}\noutput \"security_group_id\" {\n  description = test\n  value       = aws_vpc.aws_vpc.default_security_group_id\n}\n```",
-      "line": 44
+      "description": "Insert the following template outputs to complete the **main.tf** file configurations:\n\n```js\noutput \"id\" {\n  description = \"VPC ID\"\n  value       = aws_vpc.lab_vpc.id\n}\noutput \"route_table_id\" {\n  description = \"Route Table ID associated with this VPC\"\n  value       = aws_vpc.lab_vpc.main_route_table_id\n}\noutput \"security_group_id\" {\n  description = \"Default Security Group ID\"\n  value       = aws_vpc.lab_vpc.default_security_group_id\n}\n```",
+      "line": 66,
+      "title": "Outputs"
     },
     {
       "file": "aws_vpc/main.tf",
@@ -94,23 +103,33 @@
           "character": 2
         }
       },
-      "description": "output description and value with references"
+      "description": "Outputs are commonly used to pass values between Terraform modules. In this lab, you are introduced to outputs as a way of displaying specific VPC attributes upon deployment. \n\nAfter a successful deployment, the `id`, `route_table_id`, and `security_group_id` attributes will display in the terminal. These values did not have to be explicitly defined and are an example of the automatic provisioning that takes place under the hood with the AWS provider.\n\nTo retrieve these attributes, a [reference](https://developer.hashicorp.com/terraform/language/expressions/references#references-to-resource-attributes) is made to the specific VPC resource defined earlier.",
+      "title": "References"
     },
     {
       "directory": "aws_vpc",
-      "description": "The **aws_vpc** directory will be where the `terraform` CLI commands will run. \n\nTerraform init description...\n\nRun the following commands:\n\n>> cd aws_vpc && terraform init\n"
+      "description": "With the VPC configuration complete, you can begin the deployment process.\n\nThe first step is to initialize Terraform. When you run `terraform init`, the specific version of the AWS provider is installed. Terraform will create a `.terraform.lock.hcl` file to record these provider settings.\n\nClick the following command to initialize Terraform, then click **Next**:\n\n>> cd aws_vpc && terraform init\n",
+      "title": "Init"
     },
     {
       "directory": "aws_vpc",
-      "description": "terraform plan description...\n\n>> terraform plan\n\nterraform plan output description with screenshots\n"
+      "description": "The `terraform plan` command will provide you with any required changes that will be applied to your infrastructure. This command's output is a detailed preview of the deployment including resource configurations and template outputs.\n\nFor most of the VPC attributes, the `known after apply` placeholder will appear. When you run the plan command, Terraform will return as much information as it can predict about the deployment. These values are typically non-deterministic, such as IDs that are specific to the platform or randomly generated.\n\nA **Plan** field will outline the number of resources to add, change, or destroy as a part of this deployment. You will only be adding 1 resource.\n\nClick the following command, then click **Next**:\n\n>> terraform plan",
+      "title": "Plan"
     },
     {
       "directory": "aws_vpc",
-      "description": "terraform apply description\n`--auto-approve` flag description\n\nClick the following command to run the `terraform apply` command and observe the output in the terminal:\n\n>> terraform apply --auto-approve\n\nTerraform apply output and screenshots\n"
+      "description": "To execute the actions and configurations proposed in the Terraform plan, you must run the `terraform apply` command. When this command is run, the Terraform plan output will appear, followed by a confirmation prompt to allow the developer to accept or deny the changes. \n\nIn this case, you will run the apply command with the `auto-approve` flag to accept the changes automatically. This flag is commonly used in scripts that use Terraform to deploy infrastructure without the need for human intervention.\n\nTo apply the changes depicted in the Terraform plan, run the following command, then click **Next**:\n\n>> terraform apply --auto-approve\n",
+      "title": "Apply"
     },
     {
       "directory": "aws_vpc",
-      "description": ">> aws ec2 describe-vpcs --filters Name=is-default,Values=false\n\nDescription of attributes\n"
+      "description": "The apply command will succeed with a **Apply complete!** message followed by the VPC output values. This confirms the one Amazon VPC has been created.\n\nYou can also use the AWS CLI `describe-vpcs` command to confirm the deployment and display attributes that were unknown before the deployment.\n\nTo verify using the AWS CLI, click to run the following command:\n\n>> aws ec2 describe-vpcs --filters Name=is-default,Values=false\n\nClick **Next** to continue.",
+      "title": "Describe VPCs"
+    },
+    {
+      "directory": "aws_vpc",
+      "description": "You have successfully deployed an Amazon VPC resource in AWS using Terraform. \n\nReturn to the Cloud Academy Lab browser tab and run the validation check associated with this lab step.",
+      "title": "Complete"
     }
   ]
 }
